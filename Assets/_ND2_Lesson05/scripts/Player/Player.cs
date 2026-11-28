@@ -24,9 +24,9 @@ public class Player : MonoBehaviour
 
     [Header("* * * ショット設定 * * *")]
     [SerializeField] private GameObject _bulletprefab;
-    [SerializeField] private Transform _shotPoint;
+    [SerializeField] private Transform _shotPointL; //左の発射位置
+    [SerializeField] private Transform _shotPointR; //右の発射位置
     [SerializeField] private float _shotpower;
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -90,17 +90,28 @@ public class Player : MonoBehaviour
     /// <summary>
     /// 攻撃メソッド
     /// </summary>
+    /// <summary>
+    /// 攻撃メソッド
+    /// </summary>
     public void Shot()
     {
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {
+            //左の銃
+            GameObject bulletL = Instantiate(_bulletprefab, _shotPointL.position, _shotPointL.rotation);
 
-            GameObject bullet = Instantiate(_bulletprefab, _shotPoint.position, _shotPoint.rotation);
+            Rigidbody bulletRbL = bulletL.GetComponent<Rigidbody>();
+            bulletRbL.AddForce(_shotPointL.forward * _shotpower, ForceMode.Impulse);
 
-            Rigidbody bulletRb = bullet.GetComponent<Rigidbody>();
-            bulletRb.AddForce(_shotPoint.forward * _shotpower, ForceMode.Impulse);
+            Destroy(bulletL, 5.0f);
 
-            Destroy(bullet, 5.0f);
+            //右の銃
+            GameObject bulletR = Instantiate(_bulletprefab, _shotPointR.position, _shotPointR.rotation);
+
+            Rigidbody bulletRbR = bulletR.GetComponent<Rigidbody>();
+            bulletRbR.AddForce(_shotPointR.forward * _shotpower, ForceMode.Impulse);
+
+            Destroy(bulletR, 5.0f);
         }
     }
 }
